@@ -38,6 +38,9 @@ function generateBoard(sideLength) {
   board = [];
   var table = document.getElementById("board");
 
+  // Tyhjennetään taulukko tarvittaessa
+  while (table.lastChild) table.removeChild(table.lastChild);
+
   // Lisätään rivit
   for (var i = 0; i < sideLength; i++) {
     board[i] = [];
@@ -68,9 +71,10 @@ function generateBoard(sideLength) {
 
 function checkBoard(rowIndex, colIndex) {
   var sideLength = board[0].length;
-  var score = 0;
+  var score, scoreX1, scoreX2;
 
   // Tarkistetaan rivi
+  score = 0;
   for (var i = 0; i < sideLength; i++) {
     if (board[i][colIndex] === mark) score++;
   }
@@ -83,7 +87,13 @@ function checkBoard(rowIndex, colIndex) {
   }
   if (score === sideLength) endGame();
 
-  // Tarkistetaan poikittain
+  // Tarkistetaan poikittaisrivit
+  scoreX1 = scoreX2 = 0;
+  for (var k = 0; k < sideLength; k++) {
+    if (board[k][k] === mark) scoreX1++;
+    if (board[k][sideLength - (k + 1)] === mark) scoreX2++;
+  }
+  if (scoreX1 === sideLength || scoreX2 === sideLength) endGame();
 }
 
 function changePlayer() {
@@ -94,7 +104,7 @@ function changePlayer() {
 
 function endGame() {
   alert("Player " + activePlayer + " won!");
-  //initialize();
+  initialize();
 }
 
 function initialize() {
